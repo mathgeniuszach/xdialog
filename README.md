@@ -13,7 +13,7 @@ Here's how xdialog determines what dialogs to use:
 
 - On Windows, xdialog uses the built-in ctypes module to interface directly with system dialogs.
 - On Linux, it uses the `zenity` command, or defaults to Tkinter if `zenity` is not available.
-- On other systems like MacOS, it defaults to Tkinter.
+- On other systems like MacOS, it defaults to Tkinter. If someone can implement native dialogs on MacOS, that would be appreciated :)
 
 ## Usage
 
