@@ -9,6 +9,10 @@ pip install xdialog
 
 Or you can copy and paste the xdialog folder into the root of your project if pip isn't available.
 
+On Windows, xdialog uses the built-in ctypes module to interface directly with system dialogs.
+On Linux, it uses the `zenity` command, or defaults to Tkinter if `zenity` is not available.
+On other systems like MacOS, it defaults to Tkinter.
+
 ## Usage
 
 ```python
