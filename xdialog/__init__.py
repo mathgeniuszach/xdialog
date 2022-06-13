@@ -2,6 +2,7 @@ import platform
 import subprocess
 
 from .constants import *
+from .test import _test
 from typing import Iterable, Union
 
 SYSTEM = platform.system()
@@ -10,20 +11,20 @@ SYSTEM = platform.system()
 # Using import keyword instead of __import__ for extra compatibility.
 def get_dialogs():
     if SYSTEM == 'Windows':
-        import windows_dialogs
+        from . import windows_dialogs
         return windows_dialogs
     else:
         def cmd_exists(cmd):
-            proc = subprocess.Popen(('which', cmd), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            proc = subprocess.Popen(('which', cmd), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=False)
             proc.communicate()
             return not proc.returncode
         
         if cmd_exists('zenity'):
-            import zenity_dialogs
+            from . import zenity_dialogs
             return zenity_dialogs
     
     try:
-        import tk_dialogs
+        from . import tk_dialogs
         return tk_dialogs
     except ModuleNotFoundError: pass
     
@@ -72,8 +73,6 @@ def save_file(title: str = None, filetypes: Iterable[tuple[str, str]] = [("All F
 
             Each tuple will appear in a dropdown of file types to select from.
             If this argument is not specified, all file types are visible.
-
-        multiple: If True, multiple files may be selected. If False, only one file may be selected.
 
     Returns:
         The file that was selected or an empty string.
