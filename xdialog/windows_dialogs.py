@@ -150,22 +150,22 @@ def directory(title):
 # For where the magic numbers come from, see https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw
 
 def info(title, message):
-    user32.MessageBoxW(None, title or "Message", message or "", 0x00000040)
+    user32.MessageBoxW(None, message or "", title or "Message", 0x00000040)
 
 def warning(title, message):
-    user32.MessageBoxW(None, title or "Warning", message or "", 0x00000030)
+    user32.MessageBoxW(None, message or "", title or "Warning", 0x00000030)
 
 def error(title, message):
-    user32.MessageBoxW(None, title or "Error", message or "", 0x00000010)
+    user32.MessageBoxW(None, message or "", title or "Error", 0x00000010)
 
 def yesno(title, message):
-    if user32.MessageBoxW(None, title or "", message or "", 0x00000024) == 6:
+    if user32.MessageBoxW(None, message or "", title or "", 0x00000024) == 6:
         return YES
     else:
         return NO
 
 def yesnocancel(title, message):
-    r = user32.MessageBoxW(None, title or "", message or "", 0x00000023)
+    r = user32.MessageBoxW(None, message or "", title or "", 0x00000023)
 
     if r == 2:
         return CANCEL
@@ -175,13 +175,13 @@ def yesnocancel(title, message):
         return NO
 
 def retrycancel(title, message):
-    if user32.MessageBoxW(None, title or "", message or "", 0x00000025) == 4:
+    if user32.MessageBoxW(None, message or "", title or "", 0x00000025) == 4:
         return RETRY
     else:
         return CANCEL
 
 def okcancel(title, message):
-    if user32.MessageBoxW(None, title or "", message or "", 0x00000021) == 1:
+    if user32.MessageBoxW(None, message or "", title or "", 0x00000021) == 1:
         return OK
     else:
         return CANCEL
