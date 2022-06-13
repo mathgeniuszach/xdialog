@@ -1,4 +1,6 @@
 __pycache__
+build/
+dist/
 build
 build.txt
 upload

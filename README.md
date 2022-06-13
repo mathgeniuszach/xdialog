@@ -29,6 +29,7 @@ xdialog.warning("Title Here", "This is a warning")
 xdialog.error("Title Here", "This is an error")
 
 # Other dialogs are also available:
+# They can return xdialog.YES, xdialog.NO, xdialog.CANCEL, xdialog.RETRY, or xdialog.OK.
 xdialog.yesno("Title Here", "Yes, or No?")
 xdialog.yesnocancel("Title Here", "Do you want to read from this file?")
 xdialog.retrycancel("Title Here", "Failure, do you want to retry?")
