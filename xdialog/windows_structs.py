@@ -35,7 +35,7 @@ class tagOFNW(ctypes.Structure):
     ]
 
     def __init__(self, *args, **kwargs):
-        ctypes.memset(ctypes.POINTER(self), 0, ctypes.sizeof(tagOFNW))
+        ctypes.memset(ctypes.pointer(self), 0, ctypes.sizeof(tagOFNW))
         super().__init__(*args, **kwargs)
 
 
