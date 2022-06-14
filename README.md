@@ -21,9 +21,9 @@ Here's how xdialog determines what dialogs to use:
 import xdialog
 
 # For opening files (returns either Iterable[str], or str, which is empty on failure)
-xdialog.open_file("Title Here", filters=[("Text Files", "*.txt")], multiple=True)
+xdialog.open_file("Title Here", filetypes=[("Text Files", "*.txt")], multiple=True)
 # For saving files (returns str, which is empty on failure)
-xdialog.save_file("Title Here", filters=[("Text File", "*.txt")])
+xdialog.save_file("Title Here", filetypes=[("Text File", "*.txt")])
 # For selecting a directory (returns str, which is empty on failure)
 xdialog.directory("Title Here")
 
