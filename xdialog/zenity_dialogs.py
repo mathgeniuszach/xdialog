@@ -2,6 +2,18 @@ import subprocess
 
 from .constants import *
 
+def clean(txt: str):
+    return txt\
+        .replace("\\", "\\\\")\
+        .replace("$", "\\$")\
+        .replace("!", "\\!")\
+        .replace("*", "\\*")\
+        .replace("?", "\\?")\
+        .replace("&", "&amp;")\
+        .replace("|", "&#124;")\
+        .replace("<", "&lt;")\
+        .replace(">", "&gt;")\
+
 def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
     # Build args based on keywords
     args = ['zenity', '--'+typ]
@@ -9,14 +21,14 @@ def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
         if v is True:
             args.append(f'--{k.replace("_", "-").strip("-")}')
         elif isinstance(v, str):
-            args.append(f'--{k.replace("_", "-").strip("-")}={v}') 
+            args.append(f'--{k.replace("_", "-").strip("-")}={clean(v)}') 
     
     # Build filetypes specially if specified
     if filetypes:
         for name, globs in filetypes:
             if name:
                 globlist = globs.split()
-                args.append(f'--file-filter={name.replace("|", "")} ({", ".join(t for t in globlist)})|{globs}')
+                args.append(f'--file-filter={clean(name.replace("|", ""))} ({clean(", ".join(t for t in globlist))})|{clean(globs)}')
     
     proc = subprocess.Popen(
         args,
