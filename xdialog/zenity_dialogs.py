@@ -21,7 +21,8 @@ def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
         if v is True:
             args.append(f'--{k.replace("_", "-").strip("-")}')
         elif isinstance(v, str):
-            args.append(f'--{k.replace("_", "-").strip("-")}={clean(v)}') 
+            cv = clean(v) if k != "title" else v
+            args.append(f'--{k.replace("_", "-").strip("-")}={cv}') 
     
     # Build filetypes specially if specified
     if filetypes:
