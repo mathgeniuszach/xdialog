@@ -1,3 +1,6 @@
+# Code simplified and turned into python bindings from the tk8.6.12/win/tkWinDialog.c file.
+# tk is licensed here: https://www.tcl.tk/software/tcltk/license.html
+
 import ctypes 
 from ctypes.wintypes import *
 
