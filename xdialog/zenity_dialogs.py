@@ -29,7 +29,7 @@ def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
         for name, globs in filetypes:
             if name:
                 globlist = globs.split()
-                args.append(f'--file-filter={clean(name.replace("|", ""))} ({clean(", ".join(t for t in globlist))})|{clean(globs)}')
+                args.append(f'--file-filter={name.replace("|", "")} ({", ".join(t for t in globlist)})|{globs}')
     
     proc = subprocess.Popen(
         args,

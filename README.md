@@ -1,5 +1,5 @@
 # xdialog
-A cross-platform python wrapper for native dialogs.
+A cross-platform wrapper for native dialogs written entirely in python.
 
 You can install xdialog through pip...
 
@@ -7,7 +7,7 @@ You can install xdialog through pip...
 pip install xdialog
 ```
 
-Or you can copy and paste the xdialog folder into the root of your project if pip isn't available.
+Or you can copy and paste the xdialog folder into the root of your project if pip isn't available; this is possible because xdialog only uses modules in the standard library.
 
 Here's how xdialog determines what dialogs to use:
 
@@ -41,6 +41,3 @@ xdialog.yesnocancel("Title Here", "Do you want to read from this file?")
 xdialog.retrycancel("Title Here", "Failure, do you want to retry?")
 xdialog.okcancel("Title Here", "Someone did something bad on social media.")
 ```
-
-
-
