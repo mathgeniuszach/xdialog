@@ -61,9 +61,9 @@ def open_file(title, filetypes, multiple=False):
             # Windows splits the parent folder, followed by files, by null characters.
             gen = split_null_list(pfile)
             parent = next(gen)
-            return tuple(parent + "\\" + f for f in gen)
+            return [parent + "\\" + f for f in gen] or [parent]
         else:
-            return ()
+            return []
     else:
         if ok:
             return file.value

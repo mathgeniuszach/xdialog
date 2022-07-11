@@ -12,8 +12,12 @@ def _test():
     assert xdialog.open_file("Close This!", [("Text File", "*.txt")]) == ''
     print("Select a file.")
     assert len(xdialog.open_file("Select a file", [("Text File", "*.txt"), ("Python File", "*.py")])) > 0
-    print("Select multiple files.")
-    assert isinstance(xdialog.open_file("Select multiple files.", multiple=True), Iterable)
+    print("Close this.")
+    assert len(xdialog.open_file("Close this.", multiple=True)) == 0
+    print("Select exactly one file.")
+    assert len(xdialog.open_file("Select exactly one file.", multiple=True)) == 1
+    print("Select two or more files.")
+    assert len(xdialog.open_file("Select two or more files.", multiple=True)) > 1
 
     # Saving Files
     print("Close this.")
