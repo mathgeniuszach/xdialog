@@ -1,4 +1,5 @@
 import subprocess
+from os.path import isfile
 
 from .constants import *
 
@@ -43,10 +44,16 @@ def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
 
 
 def open_file(title, filetypes, multiple=False):
+    # Zenity is strange and will let you select folders for some reason in some cases. So we filter those out.
     if multiple:
-        return zenity('file-selection', title=title, filetypes=filetypes, multiple=True, separator="\n")[1].splitlines()
+        files = zenity('file-selection', title=title, filetypes=filetypes, multiple=True, separator="\n")[1].splitlines()
+        return list(filter(files, isfile))
     else:
-        return zenity('file-selection', title=title, filetypes=filetypes)[1]
+        file = zenity('file-selection', title=title, filetypes=filetypes)[1]
+        if file and isfile(file):
+            return file
+        else:
+            return ''
 
 def save_file(title, filetypes):
     return zenity('file-selection', title=title, filetypes=filetypes, save=True)[1]
