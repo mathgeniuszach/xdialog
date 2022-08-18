@@ -107,6 +107,7 @@ def save_file(title, filetypes):
 def directory(title):
     # Create dialog
     ifd = ctypes.POINTER(IFileOpenDialog)()
+    ole32.CoInitialize(0)
     hr = ole32.CoCreateInstance(
         ctypes.byref(ClsidFileOpenDialog),
         None,
