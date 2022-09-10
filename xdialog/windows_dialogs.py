@@ -51,6 +51,7 @@ def open_file(title, filetypes, multiple=False):
             out.append(f'{s} ({t})\0{";".join(t.split())}\0')
         
         opts.lpstrFilter = ''.join(out)+'\0' # Extra NULL byte just in case
+        opts.lpstrDefExt = ''.join(out)+'\0' # Extra NULL byte just in case   
     
     # Call file dialog
     ok = comdlg32.GetOpenFileNameW(ctypes.byref(opts))
