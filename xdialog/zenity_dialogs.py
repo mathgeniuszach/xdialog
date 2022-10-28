@@ -1,5 +1,6 @@
 import subprocess
 from os.path import isfile
+from typing import Tuple
 
 from .constants import *
 
@@ -15,7 +16,7 @@ def clean(txt: str):
         .replace("<", "&lt;")\
         .replace(">", "&gt;")\
 
-def zenity(typ, filetypes=None, **kwargs) -> tuple[int, str]:
+def zenity(typ, filetypes=None, **kwargs) -> Tuple[int, str]:
     # Build args based on keywords
     args = ['zenity', '--'+typ]
     for k, v in kwargs.items():

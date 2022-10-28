@@ -3,6 +3,7 @@
 
 import ctypes 
 from ctypes.wintypes import *
+from typing import Tuple
 
 LPLPWSTR = ctypes.POINTER(LPWSTR)
 LPVOIDP = ctypes.POINTER(ctypes.c_void_p)
@@ -50,7 +51,7 @@ class GUID(ctypes.Structure):
         ("Data4", ctypes.c_ubyte * 8)
     ]
 
-    def __init__(self, data1: int, data2: int, data3: int, data4: tuple[int], *args, **kwargs):
+    def __init__(self, data1: int, data2: int, data3: int, data4: Tuple[int], *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.Data1 = data1

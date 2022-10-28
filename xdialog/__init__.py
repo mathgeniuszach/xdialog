@@ -3,7 +3,7 @@ import subprocess
 
 from .constants import *
 from .test import _test
-from typing import Iterable, Union
+from typing import Iterable, Union, Tuple
 
 __all__ = [
     "open_file", "save_file", "directory",
@@ -41,7 +41,7 @@ def get_dialogs():
 
 dialogs = get_dialogs()
 
-def open_file(title: str = None, filetypes: Iterable[tuple[str, str]] = [("All Files", "*")], multiple: bool = False) -> Union[str, Iterable[str]]:
+def open_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")], multiple: bool = False) -> Union[str, Iterable[str]]:
     '''Shows a dialog box for selecting one or more files to be opened.
 
     Arguments:
@@ -65,7 +65,7 @@ def open_file(title: str = None, filetypes: Iterable[tuple[str, str]] = [("All F
     '''
     return dialogs.open_file(title, filetypes, multiple)
 
-def save_file(title: str = None, filetypes: Iterable[tuple[str, str]] = [("All Files", "*")]) -> str:
+def save_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")]) -> str:
     '''Shows a dialog box for selecting one or more files to be opened.
 
     Arguments:
