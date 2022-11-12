@@ -41,7 +41,7 @@ def open_file(title, filetypes, multiple=False):
         nMaxFile=BUFFER_SIZE,
 
         lpstrTitle=title,
-        Flags=0x00081800 + (0x200 if multiple else 0)
+        Flags=0x00081808 + (0x200 if multiple else 0)
     )
 
     # Filetypes
@@ -83,7 +83,7 @@ def save_file(title, filetypes):
         nMaxFile=BUFFER_SIZE,
 
         lpstrTitle=title,
-        Flags=0x00080002
+        Flags=0x0008000A
     )
 
     # Filetypes
