@@ -88,7 +88,10 @@ def save_file(title, filetypes):
         for s, t in filetypes:
             out.append(f'{s} ({t})\0{";".join(t.split())}\0')
         
-        opts.lpstrFilter = ''.join(out)+'\0' # Extra NULL byte just in case
+        buf = ctypes.create_unicode_buffer(''.join(out)+'\0')
+        
+        opts.lpstrFilter = LPCWSTR(ctypes.addressof(buf))
+        opts.lpstrDefExt = LPCWSTR(ctypes.addressof(buf))
     
     # Call file dialog
     ok = comdlg32.GetSaveFileNameW(ctypes.byref(opts))
