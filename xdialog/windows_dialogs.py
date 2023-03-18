@@ -12,12 +12,6 @@ ole32 = ctypes.oledll.ole32
 
 BUFFER_SIZE = 8192
 
-# Initialization and uninitialization
-ole32.OleInitialize(None)
-def oleuninit():
-    ole32.OleUninitialize()
-atexit.register(oleuninit)
-
 
 def split_null_list(strp):
     p = ctypes.cast(strp, ctypes.c_wchar_p)
@@ -110,44 +104,49 @@ def save_file(title, filetypes):
 def directory(title):
     # Create dialog
     ifd = ctypes.POINTER(IFileOpenDialog)()
-    hr = ole32.CoCreateInstance(
-        ctypes.byref(ClsidFileOpenDialog),
-        None,
-        1,
-        ctypes.byref(IIDIFileOpenDialog),
-        ctypes.byref(ifd)
-    )
-    if hr < 0: raise OSError("Failed to create dialog")
-
-    # Set options
-    flags = UINT(0)
-    hr = ifd.contents.lpVtbl.contents.GetOptions(ifd, ctypes.byref(flags))
-    if hr < 0: raise OSError("Failed to get options")
-
-    flags = UINT(flags.value | 0x1020)
-    hr = ifd.contents.lpVtbl.contents.SetOptions(ifd, flags)
-
-    # Set title
-    if title is not None: ifd.contents.lpVtbl.contents.SetTitle(ifd, title)
-
-    try:
-        hr = ifd.contents.lpVtbl.contents.Show(ifd, None)
-    except OSError:
-        return ''
     
-    # Acquire selection result
-    resultIf = LPIShellItem()
+    ole32.OleInitialize(None)
     try:
-        hr = ifd.contents.lpVtbl.contents.GetResult(ifd, ctypes.byref(resultIf))
-        if hr < 0: raise OSError("Failed to get result of directory selection")
-        wstr = LPWSTR()
-        hr = resultIf.contents.lpVtbl.contents.GetDisplayName(resultIf, 0x80058000, ctypes.byref(wstr))
-        if hr < 0: raise OSError("Failed to get display name from shell item")
-        val = wstr.value
-        ole32.CoTaskMemFree(wstr)
-        return val
+        hr = ole32.CoCreateInstance(
+            ctypes.byref(ClsidFileOpenDialog),
+            None,
+            1,
+            ctypes.byref(IIDIFileOpenDialog),
+            ctypes.byref(ifd)
+        )
+        if hr < 0: raise OSError("Failed to create dialog")
+
+        # Set options
+        flags = UINT(0)
+        hr = ifd.contents.lpVtbl.contents.GetOptions(ifd, ctypes.byref(flags))
+        if hr < 0: raise OSError("Failed to get options")
+
+        flags = UINT(flags.value | 0x1020)
+        hr = ifd.contents.lpVtbl.contents.SetOptions(ifd, flags)
+
+        # Set title
+        if title is not None: ifd.contents.lpVtbl.contents.SetTitle(ifd, title)
+
+        try:
+            hr = ifd.contents.lpVtbl.contents.Show(ifd, None)
+        except OSError:
+            return ''
+    
+        # Acquire selection result
+        resultIf = LPIShellItem()
+        try:
+            hr = ifd.contents.lpVtbl.contents.GetResult(ifd, ctypes.byref(resultIf))
+            if hr < 0: raise OSError("Failed to get result of directory selection")
+            wstr = LPWSTR()
+            hr = resultIf.contents.lpVtbl.contents.GetDisplayName(resultIf, 0x80058000, ctypes.byref(wstr))
+            if hr < 0: raise OSError("Failed to get display name from shell item")
+            val = wstr.value
+            ole32.CoTaskMemFree(wstr)
+            return val
+        finally:
+            resultIf.contents.lpVtbl.contents.Release(resultIf)
     finally:
-        resultIf.contents.lpVtbl.contents.Release(resultIf)
+        ole32.OleUninitialize()
 
 
 # For where the magic numbers come from, see https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw
