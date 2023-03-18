@@ -1,5 +1,5 @@
 # xdialog
-A cross-platform wrapper for native dialogs written entirely in python.
+A cross-platform wrapper for native dialogs written entirely in python. It's also designed to be portable and lightweight (it only uses the standard library).
 
 You can install xdialog through pip...
 
