@@ -48,7 +48,7 @@ def open_file(title, filetypes, multiple=False):
     # Zenity is strange and will let you select folders for some reason in some cases. So we filter those out.
     if multiple:
         files = zenity('file-selection', title=title, filetypes=filetypes, multiple=True, separator="\n")[1].splitlines()
-        return list(filter(files, isfile))
+        return list(filter(isfile, files))
     else:
         file = zenity('file-selection', title=title, filetypes=filetypes)[1]
         if file and isfile(file):
