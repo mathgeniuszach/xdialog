@@ -3,7 +3,7 @@ import subprocess
 
 from .constants import *
 from .test import _test
-from typing import Iterable, Union, Tuple
+from typing import Iterable, Union, Tuple, Optional, Literal, overload
 
 __all__ = [
     "open_file", "save_file", "directory",
@@ -20,6 +20,9 @@ def get_dialogs():
     if SYSTEM == 'Windows':
         from . import windows_dialogs
         return windows_dialogs
+    elif SYSTEM == "Darwin":
+        from . import mac_dialogs
+        return mac_dialogs
     else:
         def cmd_exists(cmd):
             proc = subprocess.Popen(('which', cmd), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=False)
@@ -41,7 +44,12 @@ def get_dialogs():
 
 dialogs = get_dialogs()
 
-def open_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")], multiple: bool = False) -> Union[str, Iterable[str]]:
+@overload
+def open_file(title: Optional[str] = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")], multiple: Literal[False] = False) -> str: ...
+@overload
+def open_file(title: Optional[str] = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")], multiple: Literal[True] = True) -> Iterable[str]: ...
+
+def open_file(title: Optional[str] = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")], multiple: bool = False) -> Union[str, Iterable[str]]:
     '''Shows a dialog box for selecting one or more files to be opened.
 
     Arguments:
@@ -50,14 +58,18 @@ def open_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All F
 
         filetypes: A list of tuples specifying which filetypes to show.
             The first string is a readable name of that filetype, and
-            the second string is one or more glob (e.g., * or *.txt) expression.
+            the second string is one or more glob (e.g., * or *.txt) extension.
 
             Each glob in the second string is separated by spaces.
 
-            Each tuple will appear in a dropdown of file types to select from.
+            Each tuple will normally appear in a dropdown of file types to select from.
             If this argument is not specified, all file types are visible.
 
-        multiple: If True, multiple files may be selected. If False, only one file may be selected.
+            MacOS will ignore the first string in each tuple (as it doesn't
+            display it anywhere), and will instead enable selection of all
+            file extensions provided.
+
+        multiple: If False (default), only one file may be selected. If True, multiple files may be selected.
 
     Returns:
         If `multiple` is True, an iterable of selected files or an empty iterable.
@@ -65,7 +77,7 @@ def open_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All F
     '''
     return dialogs.open_file(title, filetypes, multiple)
 
-def save_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")]) -> str:
+def save_file(title: Optional[str] = None, filetypes: Iterable[Tuple[str, str]] = [("All Files", "*")]) -> str:
     '''Shows a dialog box for selecting one or more files to be opened.
 
     Arguments:
@@ -81,12 +93,15 @@ def save_file(title: str = None, filetypes: Iterable[Tuple[str, str]] = [("All F
             Each tuple will appear in a dropdown of file types to select from.
             If this argument is not specified, all file types are visible.
 
+            MacOS does not support this option, but will instead use the first
+            tuple's glob to populate the default name.
+
     Returns:
         The file that was selected or an empty string.
     '''
     return dialogs.save_file(title, filetypes)
 
-def directory(title: str = None) -> str:
+def directory(title: Optional[str] = None) -> str:
     '''Shows a dialog box for selecting a directory. The directory must exist to be selected.
 
     Arguments:
@@ -98,7 +113,7 @@ def directory(title: str = None) -> str:
     '''
     return dialogs.directory(title)
 
-def info(title: str = None, message: str = '') -> None:
+def info(title: Optional[str] = None, message: str = '') -> None:
     '''Shows an info dialog box.
 
     Arguments:
@@ -109,7 +124,7 @@ def info(title: str = None, message: str = '') -> None:
     '''
     dialogs.info(title, message)
 
-def warning(title: str = None, message: str = '') -> None:
+def warning(title: Optional[str] = None, message: str = '') -> None:
     '''Shows a warning dialog box.
 
     Arguments:
@@ -120,7 +135,7 @@ def warning(title: str = None, message: str = '') -> None:
     '''
     dialogs.warning(title, message)
 
-def error(title: str = None, message: str = '') -> None:
+def error(title: Optional[str] = None, message: str = '') -> None:
     '''Shows an error dialog box.
 
     Arguments:
@@ -131,7 +146,7 @@ def error(title: str = None, message: str = '') -> None:
     '''
     dialogs.error(title, message)
 
-def yesno(title: str = None, message: str = '') -> int:
+def yesno(title: Optional[str] = None, message: str = '') -> int:
     '''Shows a question dialog box with the buttons "Yes" and "No".
 
     Arguments:
@@ -145,7 +160,7 @@ def yesno(title: str = None, message: str = '') -> int:
     '''
     return dialogs.yesno(title, message)
 
-def yesnocancel(title: str = None, message: str = '') -> int:
+def yesnocancel(title: Optional[str] = None, message: str = '') -> int:
     '''Shows a question dialog box with the buttons "Yes", "No", and "Cancel".
 
     Arguments:
@@ -159,7 +174,7 @@ def yesnocancel(title: str = None, message: str = '') -> int:
     '''
     return dialogs.yesnocancel(title, message)
 
-def retrycancel(title: str = None, message: str = '') -> int:
+def retrycancel(title: Optional[str] = None, message: str = '') -> int:
     '''Shows a question dialog box with the buttons "Retry" and "Cancel".
 
     Arguments:
@@ -173,7 +188,7 @@ def retrycancel(title: str = None, message: str = '') -> int:
     '''
     return dialogs.retrycancel(title, message)
 
-def okcancel(title: str = None, message: str = '') -> int:
+def okcancel(title: Optional[str] = None, message: str = '') -> int:
     '''Shows a question dialog box with the buttons "Ok" and "Cancel".
 
     Arguments:
