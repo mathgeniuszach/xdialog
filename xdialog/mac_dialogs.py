@@ -8,12 +8,12 @@ def osascript(*code: str):
     proc = subprocess.Popen(
         ["osascript", "-e", " ".join(code)],
         stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
         shell=False
     )
-    stdout, _ = proc.communicate()
+    stdout, stderr = proc.communicate()
 
-    return (proc.returncode, stdout.decode('utf-8'))
+    return (proc.returncode, stdout.decode('utf-8'), stderr.decode('utf-8'))
 
 def quote(text: str):
     return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
@@ -26,9 +26,9 @@ def dialog(title, message, icon, buttons=["OK"]):
     ]
     if title: script.append('with title ' + quote(title))
 
-    code, out = osascript(*script)
+    code, out, err = osascript(*script)
     if code: return ''
-    else: return out[out.index(":")+1:]
+    else: return out[out.index(":")+1:].strip("\r\n")
 
 def open_file(title, filetypes, multiple=False):
     script = ['choose file']
@@ -38,17 +38,18 @@ def open_file(title, filetypes, multiple=False):
         for _, exts in filetypes:
             for ext in exts.split():
                 if ext == "*": break
-                if ext[:2] == "*.": oftype.append(ext[2:])
+                if ext[:2] == "*.": oftype.append(quote(ext[2:]))
         else:
-            script.append("of type {" + ",".join(oftype) + "}")
+            if oftype: script.append("of type {" + ",".join(oftype) + "}")
     
     if multiple:
-        code, out = osascript(f'set ps to {" ".join(script)}\r\nrepeat with p in ps\r\n log POSIX path of p\r\nend repeat')
+        script.append("multiple selections allowed true")
+        code, out, err = osascript(f'set ps to ({" ".join(script)})\rrepeat with p in ps\r log (POSIX path of p)\rend repeat')
         if code: return []
 
-        return out.strip("\r\n").splitlines()
+        return err.strip("\r\n").splitlines()
     else:
-        code, out = osascript(f'POSIX path of ({" ".join(script)})')
+        code, out, err = osascript(f'POSIX path of ({" ".join(script)})')
         if code: return ''
 
         return out.strip("\r\n")
@@ -64,7 +65,7 @@ def save_file(title, filetypes):
                     script.append(f'default name "{filetype}.{ext[2:]}"') 
                     break
 
-    code, out = osascript(f'POSIX path of ({" ".join(script)})')
+    code, out, err = osascript(f'POSIX path of ({" ".join(script)})')
     if code: return ''
 
     return out.strip("\r\n")
@@ -73,7 +74,7 @@ def directory(title):
     script = ['choose folder']
     if title: script.append('with prompt ' + quote(title))
 
-    code, out = osascript(f'POSIX path of ({" ".join(script)})')
+    code, out, err = osascript(f'POSIX path of ({" ".join(script)})')
     if code: return ''
 
     return out.strip("\r\n")
