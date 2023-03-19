@@ -26,8 +26,10 @@ Both `zenity` and AppleScript provide easy access to password/input prompts, col
 import xdialog
 
 # For opening files (returns either Iterable[str], or str, which is empty on failure)
+# MacOS doesn't support filetypes fully and just disables picking any filetypes not listed
 xdialog.open_file("Title Here", filetypes=[("Text Files", "*.txt")], multiple=True)
 # For saving files (returns str, which is empty on failure)
+# MacOS doesn't support filetypes fully and uses the first type as the default filename instead
 xdialog.save_file("Title Here", filetypes=[("Text File", "*.txt")])
 # For selecting a directory (returns str, which is empty on failure)
 xdialog.directory("Title Here")

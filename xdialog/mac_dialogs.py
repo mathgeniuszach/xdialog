@@ -56,7 +56,13 @@ def open_file(title, filetypes, multiple=False):
 def save_file(title, filetypes):
     script = ['choose file name']
     if title: script.append('with prompt ' + quote(title))
-    if filetypes: script.append('default name ' + filetypes[0][1])
+    if filetypes:
+        for filetype, exts in filetypes:
+            for ext in exts.split():
+                if ext == "*": continue
+                if ext[:2] == "*.":
+                    script.append(f'default name "{filetype}.{ext[2:]}"') 
+                    break
 
     code, out = osascript(f'POSIX path of ({" ".join(script)})')
     if code: return ''
