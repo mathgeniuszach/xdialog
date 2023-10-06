@@ -48,3 +48,7 @@ xdialog.yesnocancel("Title Here", "Do you want to read from this file?")
 xdialog.retrycancel("Title Here", "Failure, do you want to retry?")
 xdialog.okcancel("Title Here", "Someone did something bad on social media.")
 ```
+
+## Contact
+
+Contact me on [Discord](https://discord.gg/pBFqEcXvW5) and support me on [Ko-Fi](https://ko-fi.com/mathgeniuszach)!
