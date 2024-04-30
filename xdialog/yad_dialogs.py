@@ -22,9 +22,6 @@ def clean(txt: str):
         .replace("{", "\\{")\
         .replace("}", "\\}")\
 
-# TODO: Make the boxes bigger
-# TODO: Make the icons correct
-
 def yad(typ, filetypes=None, **kwargs) -> Tuple[int, str]:
     # Build args based on keywords
     args = ['yad', '--'+typ]

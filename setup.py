@@ -4,7 +4,7 @@ import setuptools
 
 from pathlib import Path
 
-build = Path("build.txt")
+build = Path(__file__).parent / "build.txt"
 def get_build():
     if build.is_file():
         num = int(build.read_text())
