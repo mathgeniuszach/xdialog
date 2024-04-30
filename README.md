@@ -14,11 +14,11 @@ Here's how xdialog determines what dialogs to use:
 
 - On Windows, xdialog uses the built-in ctypes module to interface directly with system dialogs.
 - On MacOS, it uses AppleScript to interface directly with system dialogs.
-- On Linux and other systems, it uses the `zenity` command, or defaults to Tkinter if `zenity` is not available.
+- On Linux and other systems, it uses the `yad` command, the `zenity` command, or defaults to Tkinter if neither are available.
 
 ## Notes
 
-Both `zenity` and AppleScript provide easy access to password/input prompts, color pickers, and a few more useful things from the command line, while Windows makes it more difficult to access these (it requires using ctypes to mimic C++ code). It could be possible to rebind tk's dialogs on Windows into python, but for now these functions will not be implemented.
+`yad`, `zenity`, and AppleScript provide easy access to password/input prompts, color pickers, and a few more useful things from the command line, while Windows makes it more difficult to access these (it requires using ctypes to mimic C++ code). It could be possible to rebind tk's dialogs on Windows into python, but for now these functions will not be implemented.
 
 ## Usage
 

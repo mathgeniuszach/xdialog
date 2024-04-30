@@ -15,6 +15,12 @@ def clean(txt: str):
         .replace("|", "&#124;")\
         .replace("<", "&lt;")\
         .replace(">", "&gt;")\
+        .replace("(", "\\(")\
+        .replace(")", "\\)")\
+        .replace("[", "\\[")\
+        .replace("]", "\\]")\
+        .replace("{", "\\{")\
+        .replace("}", "\\}")\
 
 def zenity(typ, filetypes=None, **kwargs) -> Tuple[int, str]:
     # Build args based on keywords
@@ -24,15 +30,15 @@ def zenity(typ, filetypes=None, **kwargs) -> Tuple[int, str]:
             args.append(f'--{k.replace("_", "-").strip("-")}')
         elif isinstance(v, str):
             cv = clean(v) if k != "title" else v
-            args.append(f'--{k.replace("_", "-").strip("-")}={cv}') 
-    
+            args.append(f'--{k.replace("_", "-").strip("-")}={cv}')
+
     # Build filetypes specially if specified
     if filetypes:
         for name, globs in filetypes:
             if name:
                 globlist = globs.split()
                 args.append(f'--file-filter={name.replace("|", "")} ({", ".join(t for t in globlist)})|{globs}')
-    
+
     proc = subprocess.Popen(
         args,
         stdout=subprocess.PIPE,
@@ -93,7 +99,7 @@ def yesnocancel(title, message):
 def retrycancel(title, message):
     r = zenity(
         "question",
-        title=(title or "Retry"),
+        title=(title or ""),
         text=message,
         ok_label="Retry",
         cancel_label="Cancel"

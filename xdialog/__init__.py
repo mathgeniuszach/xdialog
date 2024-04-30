@@ -28,16 +28,19 @@ def get_dialogs():
             proc = subprocess.Popen(('which', cmd), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=False)
             proc.communicate()
             return not proc.returncode
-        
+
+        if cmd_exists('yad'):
+            from . import yad_dialogs
+            return yad_dialogs
         if cmd_exists('zenity'):
             from . import zenity_dialogs
             return zenity_dialogs
-    
+
     try:
         from . import tk_dialogs
         return tk_dialogs
     except ModuleNotFoundError: pass
-    
+
     raise ModuleNotFoundError('No dialog type is supported on this machine. Install tkinter to guarantee dialogs.')
 
 
@@ -130,7 +133,7 @@ def warning(title: Optional[str] = None, message: str = '') -> None:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
     '''
     dialogs.warning(title, message)
@@ -141,7 +144,7 @@ def error(title: Optional[str] = None, message: str = '') -> None:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
     '''
     dialogs.error(title, message)
@@ -152,9 +155,9 @@ def yesno(title: Optional[str] = None, message: str = '') -> int:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
-    
+
     Returns:
         `xdialog.YES` or `xdialog.NO`. Closing the box results in `xdialog.NO`.
     '''
@@ -166,9 +169,9 @@ def yesnocancel(title: Optional[str] = None, message: str = '') -> int:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
-    
+
     Returns:
         `xdialog.YES`, `xdialog.NO`, or `xdialog.CANCEL`. Closing the box results in `xdialog.CANCEL`.
     '''
@@ -180,9 +183,9 @@ def retrycancel(title: Optional[str] = None, message: str = '') -> int:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
-    
+
     Returns:
         `xdialog.RETRY` or `xdialog.CANCEL`. Closing the box results in `xdialog.CANCEL`.
     '''
@@ -194,9 +197,9 @@ def okcancel(title: Optional[str] = None, message: str = '') -> int:
     Arguments:
         title: Text to show on the header of the dialog box.
             Omitting it has system-dependent results.
-        
+
         message: Text to show in the middle of the dialog box.
-    
+
     Returns:
         `xdialog.OK` or `xdialog.CANCEL`. Closing the box results in `xdialog.CANCEL`.
     '''
